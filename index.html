@@ -165,13 +165,19 @@
           let screenWidth = window.innerWidth;
           let screenHeight = window.innerHeight;
 
-          let targetWidth = screenWidth;
-          let targetHeight = screenWidth * aspectRatio;
+          let screenAspectRatio = screenWidth / screenHeight;
 
-          if (targetHeight > screenHeight) {
+          let targetWidth, targetHeight;
+
+          if (screenAspectRatio > aspectRatio) {
             targetHeight = screenHeight;
             targetWidth = screenHeight * aspectRatio;
+          } else {
+            targetWidth = screenWidth;
+            targetHeight = screenWidth / aspectRatio;
           }
+
+
 
           canvas.style.width = targetWidth + "px";
           canvas.style.height = targetHeight + "px";
