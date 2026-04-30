@@ -132,6 +132,15 @@
         const container = document.querySelector("#unity-container");
         container.style.display = "flex";
 
+        var unityFooter = document.getElementById("unity-footer");
+
+        var unityLogo = document.getElementById("unity-logo-title-footer");
+        unityFooter.removeChild(unityLogo);
+        var buildTitle = document.getElementById("unity-build-title");
+        unityFooter.removeChild(buildTitle);
+        var fullscreenButton = document.getElementById("unity-fullscreen-button");
+        unityFooter.removeChild(fullscreenButton);
+
         var mobileWarning = document.getElementById("unity-mobile-warning");
         document.body.removeChild(mobileWarning);
 
