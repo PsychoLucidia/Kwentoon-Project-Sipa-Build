@@ -1,4 +1,5 @@
 #unity-mobile-warning {
+    margin: 0;
     display: none; /* Hidden by default */
     position: fixed;
     top: 0;
