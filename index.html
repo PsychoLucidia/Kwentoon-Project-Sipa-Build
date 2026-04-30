@@ -128,7 +128,6 @@
       };
 
       function setupMobileRuntime() {
-        document.head.appendChild(meta);
 
         const container = document.querySelector("#unity-container");
         container.style.display = "flex";
@@ -193,6 +192,7 @@
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.head.appendChild(meta);
         
         showMobileWarning();
 
