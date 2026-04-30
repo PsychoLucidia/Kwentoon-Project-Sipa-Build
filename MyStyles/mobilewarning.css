@@ -16,6 +16,11 @@
     font-family: sans-serif;
 }
 
+#unity-mobile-warning h2,
+#unity-mobile-warning p {
+    margin: 0;
+}
+
 #unity-mobile-warning button {
     margin-top: 20px;
     padding: 10px 20px;
