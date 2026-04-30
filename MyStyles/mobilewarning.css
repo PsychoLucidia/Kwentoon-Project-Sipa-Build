@@ -1,5 +1,4 @@
 #unity-mobile-warning {
-    margin: 0;
     display: none; /* Hidden by default */
     position: fixed;
     top: 0;
@@ -28,7 +27,7 @@
 #unity-mobile-warning button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #aaaaaa;
+    background-color: #6d6d6d;
     color: white;
     border: none;
     cursor: pointer;
