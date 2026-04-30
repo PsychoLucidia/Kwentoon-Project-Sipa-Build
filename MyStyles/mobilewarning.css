@@ -16,7 +16,10 @@
     font-family: sans-serif;
 }
 
-#unity-mobile-warning h2,
+#unity-mobile-warning h2 {
+    margin: 0;
+    margin-bottom: 10px;
+}
 #unity-mobile-warning p {
     margin: 0;
 }
