@@ -136,6 +136,9 @@
         const container = document.querySelector("#unity-container");
         container.style.display = "flex";
 
+        var mobileWarning = document.getElementById("unity-mobile-warning");
+        document.body.removeChild(mobileWarning);
+
         function resizeToAspectRatio() {
           let aspectRatio = 5 / 4;
 
