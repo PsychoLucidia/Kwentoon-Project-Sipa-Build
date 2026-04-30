@@ -16,11 +16,13 @@
     flex-direction: column;
     padding: 20px;
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 
 #unity-mobile-warning h2 {
-    margin: 0;
-    margin-bottom: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 15px;
 }
 #unity-mobile-warning p {
     margin: 0;
@@ -34,5 +36,6 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
     font-family: sans-serif;
 }

@@ -6,6 +6,7 @@
     <title>Kwentoon: Keys and Kicks Typing Rally</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="MyStyles/ImageStyles.css">
     <link rel="stylesheet" href="MyStyles/mobilewarning.css">
   </head>
   <body>
@@ -20,7 +21,7 @@
       <div id="unity-warning"> </div>
       <div id="unity-footer">
         <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
+        <!-- <div id="unity-fullscreen-button"></div> -->
         <div id="unity-build-title">Keys and Kicks Typing Rally</div>
       </div>
     </div>
@@ -129,12 +130,15 @@
         var warningDiv = document.createElement("div");
         warningDiv.id = "unity-mobile-warning";
 
+        var logo = document.getElementsByClassName("logo-div-in-flex")[0];
+        warningDiv.appendChild(logo);
+
         var header = document.createElement("h2");
-        header.innerHTML = "Mobile Not Supported";
+        header.innerHTML = "Best experience on desktop";
         warningDiv.appendChild(header);
 
         var message = document.createElement("p");
-        message.innerHTML = "This game is not intended to be played on mobile devices.";
+        message.innerHTML = "This game is made for desktop and is not optimized for mobile devices.";
         warningDiv.appendChild(message);
 
         var playAnywayBtn = document.createElement("button");
@@ -170,12 +174,12 @@
         var buildTitle = document.getElementById("unity-build-title");
         unityFooter.removeChild(buildTitle);
 
-        var fullscreenButton = document.getElementById("unity-fullscreen-button");
-        unityFooter.removeChild(fullscreenButton);
+        // var fullscreenButton = document.getElementById("unity-fullscreen-button");
+        // unityFooter.removeChild(fullscreenButton);
 
         // Remove warning screen
         var mobileWarning = document.getElementById("unity-mobile-warning");
-        document.body.removeChild(mobileWarning);
+        mobileWarning.remove();
 
         // Maintain aspect ratio
         function resizeToAspectRatio() {
@@ -210,6 +214,13 @@
         runUnity();
       }
 
+      function setupDesktopRuntime() {
+        canvas.style.width = "750px";
+        canvas.style.height = "600px";
+
+        runUnity();
+      }
+
 
       /* =========================================================
       * ENTRY POINT (DEVICE DETECTION)
@@ -221,6 +232,15 @@
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
         document.head.appendChild(meta);
+
+        let gameLogoMobile = document.createElement("div");
+        gameLogoMobile.className = "logo-div-in-flex";  
+        document.body.appendChild(gameLogoMobile);
+
+        let gameLogo = document.createElement("img");
+        gameLogo.id = "game-logo";
+        gameLogo.src = "MyStyles/logo.png";
+        gameLogoMobile.appendChild(gameLogo);
 
         showMobileWarning();
 
@@ -237,12 +257,7 @@
         // config.devicePixelRatio = 1;
 
       } else {
-
-        // Desktop style
-        canvas.style.width = "750px";
-        canvas.style.height = "600px";
-
-        runUnity();
+        setupDesktopRuntime();
       }
 
     </script>    
