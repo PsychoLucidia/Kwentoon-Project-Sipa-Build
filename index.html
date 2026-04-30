@@ -25,88 +25,14 @@
       </div>
     </div>
     <script>
+      /* =========================================================
+      * DOM REFERENCES & GLOBAL VARIABLES
+      * ========================================================= */
       var canvas = document.querySelector("#unity-canvas");
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      function runUnity() {
-        document.querySelector("#unity-loading-bar").style.display = "block";
-
-        var script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-          createUnityInstance(canvas, config, (progress) => {
-            document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-          }).then((unityInstance) => {
-            document.querySelector("#unity-loading-bar").style.display = "none";
-            // document.querySelector("#unity-fullscreen-button").onclick = () => {
-            //   unityInstance.SetFullscreen(1);
-            // };
-
-          }).catch((message) => {
-            alert(message);
-          });
-        };
-
-        document.body.appendChild(script);
-      }
-      
-      /*
-       * Show a warning banner if the user agent is not supported.
-       * Create a warning banner message
-       */
-      function showMobileWarning() {
-        var warningDiv = document.createElement("div");
-        warningDiv.id = "unity-mobile-warning";
-
-        var header = document.createElement("h2");
-        header.innerHTML = "Mobile Not Supported";
-        warningDiv.appendChild(header);
-
-        var message = document.createElement("p");
-        message.innerHTML = "This game is not intended to be played on mobile devices.";
-        warningDiv.appendChild(message);
-
-        var playAnywayBtn = document.createElement("button");
-
-        playAnywayBtn.textContent = "Play Anyway";
-        playAnywayBtn.addEventListener("click", function() {
-          warningDiv.style.display = "none";
-          setupMobileRuntime();
-        });
-        
-        warningDiv.appendChild(playAnywayBtn);
-
-        document.body.appendChild(warningDiv);
-
-        warningDiv.style.display = "flex";
-      }
-      
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/Kwentoon-Project-Sipa-Build.loader.js";
+
       var config = {
         arguments: [],
         dataUrl: buildUrl + "/Kwentoon-Project-Sipa-Build.data",
@@ -127,29 +53,136 @@
         // },
       };
 
+      // config.matchWebGLToCanvasSize = false;
+      // config.autoSyncPersistentDataPath = true;
+
+
+      /* =========================================================
+      * UI HELPERS (BANNERS / WARNINGS)
+      * ========================================================= */
+
+      // Shows temporary or permanent messages on screen
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+
+        if (type == 'error') {
+          div.style = 'background: red; padding: 10px;';
+        } else {
+          if (type == 'warning') {
+            div.style = 'background: yellow; padding: 10px;';
+          }
+
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+
+        updateBannerVisibility();
+      }
+
+
+      /* =========================================================
+      * UNITY RUNTIME LOADING
+      * ========================================================= */
+
+      function runUnity() {
+        document.querySelector("#unity-loading-bar").style.display = "block";
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+
+        script.onload = () => {
+          createUnityInstance(canvas, config, (progress) => {
+            document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+          })
+          .then((unityInstance) => {
+            document.querySelector("#unity-loading-bar").style.display = "none";
+
+            // document.querySelector("#unity-fullscreen-button").onclick = () => {
+            //   unityInstance.SetFullscreen(1);
+            // };
+
+          })
+          .catch((message) => {
+            alert(message);
+          });
+        };
+
+        document.body.appendChild(script);
+      }
+
+
+      /* =========================================================
+      * MOBILE WARNING UI
+      * ========================================================= */
+
+      function showMobileWarning() {
+        var warningDiv = document.createElement("div");
+        warningDiv.id = "unity-mobile-warning";
+
+        var header = document.createElement("h2");
+        header.innerHTML = "Mobile Not Supported";
+        warningDiv.appendChild(header);
+
+        var message = document.createElement("p");
+        message.innerHTML = "This game is not intended to be played on mobile devices.";
+        warningDiv.appendChild(message);
+
+        var playAnywayBtn = document.createElement("button");
+        playAnywayBtn.textContent = "Play Anyway";
+
+        playAnywayBtn.onclick = () => {
+          warningDiv.style.display = "none";
+          setupMobileRuntime();
+        };
+
+        warningDiv.appendChild(playAnywayBtn);
+
+        document.body.appendChild(warningDiv);
+        warningDiv.style.display = "flex";
+      }
+
+
+      /* =========================================================
+      * MOBILE RUNTIME SETUP
+      * ========================================================= */
+
       function setupMobileRuntime() {
 
         const container = document.querySelector("#unity-container");
         container.style.display = "flex";
 
+        // Remove desktop-only UI
         var unityFooter = document.getElementById("unity-footer");
 
         var unityLogo = document.getElementById("unity-logo-title-footer");
         unityFooter.removeChild(unityLogo);
+
         var buildTitle = document.getElementById("unity-build-title");
         unityFooter.removeChild(buildTitle);
+
         var fullscreenButton = document.getElementById("unity-fullscreen-button");
         unityFooter.removeChild(fullscreenButton);
 
+        // Remove warning screen
         var mobileWarning = document.getElementById("unity-mobile-warning");
         document.body.removeChild(mobileWarning);
 
+        // Maintain aspect ratio
         function resizeToAspectRatio() {
           let aspectRatio = 5 / 4;
 
           let screenWidth = window.innerWidth;
           let screenHeight = window.innerHeight;
-
           let screenAspectRatio = screenWidth / screenHeight;
 
           let targetWidth, targetHeight;
@@ -161,8 +194,6 @@
             targetWidth = screenWidth;
             targetHeight = screenWidth / aspectRatio;
           }
-
-
 
           canvas.style.width = targetWidth + "px";
           canvas.style.height = targetHeight + "px";
@@ -179,30 +210,18 @@
         runUnity();
       }
 
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
 
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
+      /* =========================================================
+      * ENTRY POINT (DEVICE DETECTION)
+      * ========================================================= */
 
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
 
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
         document.head.appendChild(meta);
-        
+
         showMobileWarning();
 
         var unityContainer = document.querySelector("#unity-container");
@@ -210,24 +229,22 @@
           unityContainer.style.display = "none";
         }
 
-        // Mobile style: Fill the whole browser client area with the game canvas
-        // Currently commented out for future support for mobile devices
-
+        // Mobile style (future support)
         // document.getElementsByTagName('head')[0].appendChild(meta);
         // document.querySelector("#unity-container").className = "unity-mobile";
         // canvas.className = "unity-mobile";
 
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
 
       } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        // Desktop style
         canvas.style.width = "750px";
         canvas.style.height = "600px";
 
         runUnity();
       }
-    </script>
+
+    </script>    
   </body>
 </html>
